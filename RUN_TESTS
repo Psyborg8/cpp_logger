@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cmake -B "${SCRIPT_DIR}/build" -S "${SCRIPT_DIR}" -DBUILD_TESTS=ON
+make -C "${SCRIPT_DIR}/build"
+sudo make install -C "${SCRIPT_DIR}/build"
+${SCRIPT_DIR}/build/cpp_logger_tests
