@@ -1,6 +1,34 @@
 #!/bin/bash
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-bash ${SCRIPT_DIR}/BUILD
-sudo make install -C "${SCRIPT_DIR}/build"
+
+echo "----------------------------"
+read -p "Build tests? (y): " BUILD_TESTS
+echo "----------------------------"
+
+if [ $BUILD_TESTS == 'y' ]; then
+    echo "Building library and tests"
+    cmake -B "${SCRIPT_DIR}/build" -S "${SCRIPT_DIR}" -DBUILD_TESTS=ON
+else
+    echo "Building library"
+    cmake -B "${SCRIPT_DIR}/build" -S "${SCRIPT_DIR}"
+fi
+
+make -C "${SCRIPT_DIR}/build" -j8
+
+echo "----------------------------"
+read -p "Install library? (y): " INSTALL
+echo "----------------------------"
+
+if [ $INSTALL == 'y' ]; then
+    sudo make install -C "${SCRIPT_DIR}/build"
+fi
+
+echo "----------------------------"
+read -p "Run tests? (y): " RUN_TESTS
+echo "----------------------------"
+
+if [ $RUN_TESTS == 'y' ]; then
+    ${SCRIPT_DIR}/build/cpp_logger_tests
+fi
 

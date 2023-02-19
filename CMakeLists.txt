@@ -17,7 +17,7 @@ add_library( cpp_logger SHARED ${CMAKE_CURRENT_SOURCE_DIR} )
 set_target_properties( cpp_logger PROPERTIES 
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
-    PUBLIC_HEADER src/logger.hpp
+    PUBLIC_HEADER src/logger.h
     )
 
 # Libraries
@@ -30,7 +30,7 @@ add_subdirectory( src )
 
 # Installation
 include( GNUInstallDirs )
-configure_file( cpp_logger.pc.in cpp_logger.pc @ONLY )
+configure_file( build/cpp_logger.pc.in cpp_logger.pc @ONLY )
 install( TARGETS cpp_logger
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )

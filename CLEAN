@@ -1,0 +1,10 @@
+#!/bin/bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+files=$( ls "${SCRIPT_DIR}/build" )
+for file in $files; do
+    if [ $file != "cpp_logger.pc.in" ]; then
+        sudo rm -r "${SCRIPT_DIR}/build/${file}"
+    fi
+done

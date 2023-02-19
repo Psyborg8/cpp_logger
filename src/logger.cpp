@@ -11,10 +11,6 @@
 #include <fmt/format.h>
 #include <fstream>
 
-// ----------------------------------------------------------------------
-
-#include "cursor.h"
-
 // ======================================================================
 
 namespace logger {
@@ -88,7 +84,7 @@ void Logger::log( std::string message, Depth depth ) const {
 	if( m_settings.console_enabled ) {
 		std::string console_str
 			= create_log_string( message, m_settings, LogType::CONSOLE, depth );
-		cursor::write_line( console_str.c_str() );
+		printf( "%s\n", console_str.c_str() );
 	}
 
 	// Write file message
@@ -111,7 +107,7 @@ void Logger::log_separator( std::string str, Depth depth ) const {
 		if( m_settings.console_color_enabled )
 			console_str = color_string( console_str, to_color( depth ) );
 
-		cursor::write_line( console_str );
+		printf( "%s\n", console_str.c_str() );
 	};
 
 	// Write file separator
@@ -171,22 +167,6 @@ std::string
 	if( type == LogType::FILE )
 		out += get_time_string( settings.date_time_format ) + " - ";
 
-	// Depth
-	std::string depth_str;
-	size_t depth_size = to_string( Depth::CRITICAL ).length();
-
-	// TODO
-	if( depth != Depth::NONE )
-		depth_str = to_string( depth );
-
-	depth_str.resize( depth_size, ' ' );
-
-	if( type == LogType::CONSOLE && settings.console_color_enabled )
-		depth_str = color_string( depth_str, to_color( depth ) );
-
-	depth_str += " | ";
-	out += depth_str;
-
 	// Name
 	std::string name = settings.name;
 	size_t diff		 = 0u;
@@ -197,11 +177,20 @@ std::string
 
 	name = fmt::format( "[{}]", name );
 	name.resize( name.length() + diff, ' ' );
+	out += fmt::format( "{} | ", name );
 
-	out += name;
+	// Depth
+	if( depth != Depth::NONE ) {
+		std::string depth_str = to_string( depth );
+
+		if( type == LogType::CONSOLE && settings.console_color_enabled )
+			depth_str = color_string( depth_str, to_color( depth ) );
+
+		out += fmt::format( "{} - ", depth_str );
+	}
 
 	// Message
-	out += fmt::format( " | {}", msg );
+	out += msg;
 
 	return out;
 }
