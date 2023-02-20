@@ -28,8 +28,11 @@ size_t g_longest_name{ 0u };
 
 std::string get_time_string( std::string format );
 std::string color_string( std::string str, Color col );
-std::string
-	create_log_string( std::string msg, const Settings& settings, LogType type, Depth depth );
+std::string create_log_string( std::string msg,
+							   const Settings& settings,
+							   LogType type,
+							   Depth depth,
+							   size_t indentation );
 void write_to_file( std::string str, const Settings& settings );
 
 // ======================================================================
@@ -75,22 +78,22 @@ void Logger::set_settings( Settings settings ) {
 
 // ----------------------------------------------------------------------
 
-void Logger::log( std::string message, Depth depth ) const {
+void Logger::log( std::string message, Depth depth, size_t indentation ) const {
 	if( static_cast< uint8_t >( depth ) < static_cast< uint8_t >( m_settings.visible_depth ) )
 		return;
 
 
 	// Print console message
 	if( m_settings.console_enabled ) {
-		std::string console_str
-			= create_log_string( message, m_settings, LogType::CONSOLE, depth );
+		std::string console_str = create_log_string(
+			message, m_settings, LogType::CONSOLE, depth, indentation );
 		printf( "%s\n", console_str.c_str() );
 	}
 
 	// Write file message
 	if( m_settings.file_enabled ) {
-		std::string file_str
-			= create_log_string( message, m_settings, LogType::FILE, depth );
+		std::string file_str = create_log_string(
+			message, m_settings, LogType::FILE, depth, indentation );
 		write_to_file( file_str, m_settings );
 	}
 }
@@ -158,10 +161,14 @@ std::string color_string( std::string str, Color col ) {
 
 // ----------------------------------------------------------------------
 
-std::string
-	create_log_string( std::string msg, const Settings& settings, LogType type, Depth depth ) {
+std::string create_log_string( std::string msg,
+							   const Settings& settings,
+							   LogType type,
+							   Depth depth,
+							   size_t indentation ) {
 	std::string out;
 	out.reserve( 1024u );
+	out.resize( indentation, ' ' );
 
 	// Timestamp
 	if( type == LogType::FILE )

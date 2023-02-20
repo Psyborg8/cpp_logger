@@ -1,22 +1,7 @@
 #ifndef _LOGGER_H
 #define _LOGGER_H
 
-/***********************************************************************/
-/***************************** LOGGER.H ********************************/
-/***********************************************************************/
-
-// A light-weight header-only library to standardize logging
-// in my own projects.
-
-// **********************************************************************
-// FORMATTING:
-//      Format strings support the following options:
-//          $t - The date/time stamp (using the dateTimeFormat string )
-//          $d - The depth string
-//          $m - The log message
-//          $n - Logger name
-// **********************************************************************
-
+// ======================================================================
 
 #include <string>
 
@@ -68,7 +53,7 @@ public:
 	Logger( Settings settings );
 
 public:
-	void log( std::string message, Depth depth = Depth::NONE ) const;
+	void log( std::string message, Depth depth = Depth::NONE, size_t indentation = 0u ) const;
 	void log_separator( std::string str, Depth depth = Depth::NONE ) const;
 	void log_separator( char character, Depth depth = Depth::NONE ) const;
 
