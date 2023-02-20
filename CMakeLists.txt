@@ -1,32 +1,40 @@
 cmake_minimum_required( VERSION 3.9 )
+project( cpp_logger VERSION 0.0.1 LANGUAGES CXX )
 
 # Build commands
 set( CMAKE_CXX_STANDARD 20 )
-set( CMAKE_BUILD_TYPE "Debug" )
+set( CMAKE_BUILD_TYPE "DEBUG" )
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
-set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}" )
-set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}" )
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}" )
-
-option( BUILD_SHARED_LIBS "Build using shared libraries" ON )
+set( cpp_logger_INCLUDE_DIRS src )
+set( cpp_logger_LIBRARY_DIRS ${PROJECT_BINARY_DIR} )
 
 # Create library
-project( cpp_logger VERSION 0.0.1 LANGUAGES CXX )
-add_library( cpp_logger SHARED ${CMAKE_CURRENT_SOURCE_DIR} )
-set_target_properties( cpp_logger PROPERTIES 
-    VERSION ${PROJECT_VERSION}
-    SOVERSION 1
-    PUBLIC_HEADER src/logger.h
-    )
+file( GLOB_RECURSE SRC src/*.cpp )
+add_library( cpp_logger MODULE ${SRC})
 
-# Libraries
-target_link_libraries( cpp_logger
-    fmt
-)
+target_include_directories( cpp_logger PUBLIC ${cpp_logger_INCLUDE_DIRS} )
 
-# Source files
-add_subdirectory( src )
+link_directories( cpp_logger PUBLIC ${cpp_logger_LIBRARY_DIRS} )
+
+target_link_libraries( cpp_logger PRIVATE fmt )
+
+target_compile_options( cpp_logger PRIVATE -std=c++17 -Wall -Wextra )
+
+if( CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
+    target_compile_options( cpp_logger PUBLIC -g3 )
+    target_compile_definitions( cpp_logger PRIVATE DEBUG=1 )
+elseif( CMAKE_BUILD_TYPE EQUAL "RELEASE" )
+    target_compile_options( cpp_logger PUBLIC -O2 )
+endif()
+
+set( cpp_logger_LIBRARY_DIRS "${cpp_logger_LIBRARY_DIRS} ${PROJECT_BINARY_DIR}" )
+
+get_directory_property( HAS_PARENT_DIR PARENT_DIRECTORY )
+if( HAS_PARENT_DIR )
+    set( cpp_logger_LIBRARY_DIRS ${cpp_logger_LIBRARY_DIRS} PARENT_SCOPE )
+    set( cpp_logger_INCLUDE_DIRS ${cpp_logger_INCLUDE_DIRS} PARENT_SCOPE )
+endif()
 
 # Installation
 include( GNUInstallDirs )
