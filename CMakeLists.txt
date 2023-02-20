@@ -6,7 +6,7 @@ set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_BUILD_TYPE "DEBUG" )
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
-set( cpp_logger_INCLUDE_DIRS src )
+set( cpp_logger_INCLUDE_DIRS ${cpp_logger_SOURCE_DIR} )
 set( cpp_logger_LIBRARY_DIRS ${PROJECT_BINARY_DIR} )
 
 # Create library
