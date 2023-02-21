@@ -46,6 +46,11 @@ const Settings& get_defaults();
 void reset();
 
 // ======================================================================
+// String helper functions
+
+void indent_string( std::string& str, size_t indent );
+
+// ======================================================================
 
 class Logger {
 public:

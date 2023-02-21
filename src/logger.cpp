@@ -54,6 +54,16 @@ void reset() {
 }
 
 // ======================================================================
+// String helper functions
+// ======================================================================
+
+void indent_string( std::string& str, size_t indent ) {
+	std::string indent_str;
+	indent_str.resize( indent, ' ' );
+	str = indent_str + str;
+}
+
+// ======================================================================
 
 Logger::Logger() : m_settings( g_defaults ) {
 	if( m_settings.name.length() > g_longest_name )

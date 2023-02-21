@@ -23,7 +23,7 @@ target_compile_options( cpp_logger PRIVATE -std=c++17 -Wall -Wextra )
 
 if( CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
     target_compile_options( cpp_logger PUBLIC -g3 )
-    target_compile_definitions( cpp_logger PRIVATE DEBUG=1 )
+    target_compile_definitions( cpp_logger PRIVATE _DEBUG=1 )
 elseif( CMAKE_BUILD_TYPE EQUAL "RELEASE" )
     target_compile_options( cpp_logger PUBLIC -O2 )
 endif()
