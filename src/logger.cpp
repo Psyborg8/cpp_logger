@@ -28,13 +28,12 @@ size_t g_longest_name{ 0u };
 
 std::string get_time_string( std::string format );
 std::string color_string( std::string str, Color col );
-std::string create_log_string( std::string msg,
-							   const Settings& settings,
-							   LogType type,
-							   Depth depth,
-							   size_t indentation );
+std::string
+	create_log_string( std::string msg, const Settings& settings, LogType type, Depth depth );
 void write_to_file( std::string str, const Settings& settings );
 
+// ======================================================================
+// Defaults
 // ======================================================================
 
 void set_defaults( const Settings& defaults ) {
@@ -57,12 +56,34 @@ void reset() {
 // String helper functions
 // ======================================================================
 
-void indent_string( std::string& str, size_t indent ) {
+std::string indent_string( std::string str, size_t indent ) {
 	std::string indent_str;
 	indent_str.resize( indent, ' ' );
-	str = indent_str + str;
+	return indent_str + str;
 }
 
+// ----------------------------------------------------------------------
+
+std::vector< std::string > split_string( const std::string& str, std::string delim ) {
+	std::vector< std::string > out;
+	size_t last_pos = 0u;
+	size_t pos		= str.find( delim );
+	while( true ) {
+		if( pos == std::string::npos )
+			break;
+
+		out.push_back( str.substr( pos, pos - last_pos ) );
+		last_pos = pos;
+		pos		 = str.find( delim, last_pos );
+	}
+
+	out.push_back( str.substr( last_pos, str.length() - last_pos ) );
+
+	return out;
+}
+
+// ======================================================================
+// CLASS: Logger
 // ======================================================================
 
 Logger::Logger() : m_settings( g_defaults ) {
@@ -92,19 +113,22 @@ void Logger::log( std::string message, Depth depth, size_t indentation ) const {
 	if( static_cast< uint8_t >( depth ) < static_cast< uint8_t >( m_settings.visible_depth ) )
 		return;
 
+	std::vector< std::string > lines = split_string( message, "\n" );
 
-	// Print console message
-	if( m_settings.console_enabled ) {
-		std::string console_str = create_log_string(
-			message, m_settings, LogType::CONSOLE, depth, indentation );
-		printf( "%s\n", console_str.c_str() );
-	}
+	for( std::string line : lines ) {
+		// Print console message
+		if( m_settings.console_enabled ) {
+			std::string console_str = create_log_string(
+				indent_string( line, indentation ), m_settings, LogType::CONSOLE, depth );
+			printf( "%s\n", console_str.c_str() );
+		}
 
-	// Write file message
-	if( m_settings.file_enabled ) {
-		std::string file_str = create_log_string(
-			message, m_settings, LogType::FILE, depth, indentation );
-		write_to_file( file_str, m_settings );
+		// Write file message
+		if( m_settings.file_enabled ) {
+			std::string file_str = create_log_string(
+				indent_string( line, indentation ), m_settings, LogType::FILE, depth );
+			write_to_file( file_str, m_settings );
+		}
 	}
 }
 
@@ -113,6 +137,8 @@ void Logger::log( std::string message, Depth depth, size_t indentation ) const {
 void Logger::log_separator( std::string str, Depth depth ) const {
 	if( static_cast< uint8_t >( depth ) < static_cast< uint8_t >( m_settings.visible_depth ) )
 		return;
+
+	if( str.find( '\n' ) ) {}
 
 	// Print console separator
 	if( m_settings.console_enabled ) {
@@ -152,6 +178,8 @@ void Logger::log_separator( char character, Depth depth ) const {
 }
 
 // ======================================================================
+// Locals
+// ======================================================================
 
 std::string get_time_string( std::string format ) {
 	time_t t	  = std::time( nullptr );
@@ -171,14 +199,10 @@ std::string color_string( std::string str, Color col ) {
 
 // ----------------------------------------------------------------------
 
-std::string create_log_string( std::string msg,
-							   const Settings& settings,
-							   LogType type,
-							   Depth depth,
-							   size_t indentation ) {
+std::string
+	create_log_string( std::string msg, const Settings& settings, LogType type, Depth depth ) {
 	std::string out;
 	out.reserve( 1024u );
-	out.resize( indentation, ' ' );
 
 	// Timestamp
 	if( type == LogType::FILE )

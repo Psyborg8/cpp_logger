@@ -4,6 +4,7 @@
 // ======================================================================
 
 #include <string>
+#include <vector>
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +49,8 @@ void reset();
 // ======================================================================
 // String helper functions
 
-void indent_string( std::string& str, size_t indent );
+std::string indent_string( std::string str, size_t indent );
+std::vector< std::string > split_string( const std::string& str, std::string delim );
 
 // ======================================================================
 
