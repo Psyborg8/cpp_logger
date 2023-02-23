@@ -18,7 +18,6 @@ namespace logger {
 // Settings
 
 struct Settings {
-	std::string name{ "CORE" };
 	Depth visible_depth{ Depth::WARNING };
 
 	// Format
@@ -50,14 +49,14 @@ void reset();
 // String helper functions
 
 std::string indent_string( std::string str, size_t indent );
-std::vector< std::string > split_string( const std::string& str, std::string delim );
+std::vector< std::string > split_string( std::string str, std::string delim );
 
 // ======================================================================
 
 class Logger {
 public:
-	Logger();
-	Logger( Settings settings );
+	Logger( std::string name = "CORE" );
+	Logger( Settings settings, std::string name = "CORE" );
 
 public:
 	void log( std::string message, Depth depth = Depth::NONE, size_t indentation = 0u ) const;
@@ -66,8 +65,17 @@ public:
 
 	void set_settings( Settings settings );
 	inline Settings get_settings() const { return m_settings; }
+	inline Settings& get_settings() { return m_settings; }
 
 private:
+	std::string get_time_string() const;
+	std::string color_string( std::string str, Color col ) const;
+	std::string create_console_string( std::string msg, Depth depth ) const;
+	std::string create_file_string( std::string msg, Depth depth ) const;
+	void write_to_file( std::string str ) const;
+
+private:
+	std::string m_name;
 	Settings m_settings;
 };
 

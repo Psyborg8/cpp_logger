@@ -37,31 +37,9 @@ enum class Depth : unsigned short int {
 
 // ----------------------------------------------------------------------
 
-std::string to_string( Depth depth ) {
-	switch( depth ) {
-		case Depth::TRACE: return "TRACE";
-		case Depth::DEBUG: return "DEBUG";
-		case Depth::INFO: return "INFO";
-		case Depth::WARNING: return "WARNING";
-		case Depth::ERROR: return "ERROR";
-		case Depth::CRITICAL: return "CRITICAL";
-		default: return "";
-	}
-}
-
-// ----------------------------------------------------------------------
-
-Color to_color( Depth depth ) {
-	switch( depth ) {
-		case Depth::TRACE: return Color::BLUE;
-		case Depth::DEBUG: return Color::GREEN;
-		case Depth::INFO: return Color::CYAN;
-		case Depth::WARNING: return Color::YELLOW;
-		case Depth::ERROR: return Color::RED;
-		case Depth::CRITICAL: return Color::PURPLE;
-		default: return Color::NONE;
-	}
-}
+size_t longest_depth_length();
+std::string to_string( Depth depth );
+Color to_color( Depth depth );
 
 // ======================================================================
 
