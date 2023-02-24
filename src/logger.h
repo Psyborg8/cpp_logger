@@ -69,7 +69,6 @@ public:
 
 private:
 	std::string get_time_string() const;
-	std::string color_string( std::string str, Color col ) const;
 	std::string create_console_string( std::string msg, Depth depth ) const;
 	std::string create_file_string( std::string msg, Depth depth ) const;
 	void write_to_file( std::string str ) const;

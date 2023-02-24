@@ -141,11 +141,7 @@ void Logger::log_separator( std::string str, Depth depth ) const {
 
 	// Print console separator
 	if( m_settings.console_enabled ) {
-		std::string console_str = str;
-		if( m_settings.console_color_enabled )
-			console_str = color_string( console_str, to_color( depth ) );
-
-		printf( "%s\n", console_str.c_str() );
+		printf( "%s\n", str.c_str() );
 	};
 
 	// Write file separator
@@ -190,12 +186,6 @@ std::string Logger::get_time_string() const {
 
 // ----------------------------------------------------------------------
 
-std::string Logger::color_string( std::string str, Color col ) const {
-	return fmt::format( "\033[1m\033[{}m{}\033[0m", static_cast< int >( col ), str );
-}
-
-// ----------------------------------------------------------------------
-
 std::string Logger::create_console_string( std::string msg, Depth depth ) const {
 	std::string out;
 	out.reserve( 1024u );
@@ -204,11 +194,12 @@ std::string Logger::create_console_string( std::string msg, Depth depth ) const 
 
 	std::string depth_str;
 	if( depth != Depth::NONE ) {
-		depth_str = to_string( depth );
-		whitespace -= depth_str.length() + 1u;
+		whitespace -= to_string( depth, false ).length();
 
 		if( m_settings.console_color_enabled )
-			depth_str = color_string( depth_str, to_color( depth ) );
+			depth_str = to_string( depth );
+		else
+			depth_str = to_string( depth, false );
 	}
 
 	std::string title_str;

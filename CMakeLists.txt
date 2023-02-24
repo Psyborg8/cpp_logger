@@ -8,10 +8,13 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 file( GLOB_RECURSE SRC src/*.cpp )
 add_library( cpp_logger ${SRC})
 
+add_subdirectory( ${CMAKE_CURRENT_LIST_DIR}/deps/cpp_consoler )
+add_dependencies( cpp_logger cpp_consoler )
+
 target_include_directories( cpp_logger PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
 
 find_package( fmt )
-target_link_libraries( cpp_logger fmt::fmt )
+target_link_libraries( cpp_logger fmt::fmt cpp_consoler )
 
 target_compile_options( cpp_logger 
     PRIVATE 

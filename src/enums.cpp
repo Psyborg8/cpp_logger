@@ -6,31 +6,38 @@
 
 #include <unordered_map>
 
+// ----------------------------------------------------------------------
+
+#include "consoler.h"
+
 // ======================================================================
 
 namespace logger {
 
 // ======================================================================
 
-std::unordered_map< Depth, std::string > _depth_string_map{
-	{ Depth::TRACE, "TRACE" }, { Depth::DEBUG, "DEBUG" },
-	{ Depth::INFO, "INFO" },   { Depth::WARNING, "WARNING" },
-	{ Depth::ERROR, "ERROR" }, { Depth::CRITICAL, "CRITICAL" },
-	{ Depth::NONE, "NONE" },
-};
-
-// ----------------------------------------------------------------------
-
-std::unordered_map< Depth, Color > _depth_color_map{
-	{ Depth::TRACE, Color::BLUE }, { Depth::DEBUG, Color::GREEN },
-	{ Depth::INFO, Color::CYAN },  { Depth::WARNING, Color::YELLOW },
-	{ Depth::ERROR, Color::RED },  { Depth::CRITICAL, Color::PURPLE },
-	{ Depth::NONE, Color::NONE },
+std::unordered_map< Depth, console::String > _depth_string_map{
+	{ Depth::TRACE,
+	  { "TRACE",
+		{ console::Color_16::BRIGHT_BLUE, console::Color_16::DEFAULT, false, false, false, false, false, false, false, console::Underline_Mode::NONE } } },
+	{ Depth::DEBUG,
+	  { "DEBUG",
+		{ console::Color_16::BRIGHT_GREEN, console::Color_16::DEFAULT, false, false, false, false, false, false, false, console::Underline_Mode::NONE } } },
+	{ Depth::INFO,
+	  { "INFO",
+		{ console::Color_16::BRIGHT_CYAN, console::Color_16::DEFAULT, false, false, false, false, false, false, false, console::Underline_Mode::NONE } } },
+	{ Depth::WARNING,
+	  { "WARNING",
+		{ console::Color_16::BRIGHT_YELLOW, console::Color_16::DEFAULT, false, false, false, false, false, false, false, console::Underline_Mode::NONE } } },
+	{ Depth::ERROR,
+	  { "ERROR",
+		{ console::Color_16::BRIGHT_RED, console::Color_16::DEFAULT, false, false, false, false, false, false, false, console::Underline_Mode::NONE } } },
+	{ Depth::CRITICAL,
+	  { "CRITICAL",
+		{ console::Color_16::BLACK, console::Color_16::BRIGHT_RED, false, false, false, false, false, false, false, console::Underline_Mode::NONE } } }
 };
 
 // ======================================================================
-
-// ----------------------------------------------------------------------
 
 size_t longest_depth_length() {
 	return to_string( Depth::CRITICAL ).length();
@@ -38,14 +45,11 @@ size_t longest_depth_length() {
 
 // ----------------------------------------------------------------------
 
-std::string to_string( Depth depth ) {
-	return _depth_string_map.at( depth );
-}
-
-// ----------------------------------------------------------------------
-
-Color to_color( Depth depth ) {
-	return _depth_color_map.at( depth );
+std::string to_string( Depth depth, bool format ) {
+	if( format )
+		return _depth_string_map.at( depth ).format();
+	else
+		return _depth_string_map.at( depth ).get_string();
 }
 
 // ======================================================================
