@@ -1,3 +1,6 @@
 [submodule "deps"]
 	path = deps/cpp_consoler
 	url = git@github.com:psyborg8/cpp_consoler
+[submodule "deps/cpp_consoler"]
+	path = deps/cpp_consoler
+	url = git@github.com:psyborg8/cpp_consoler
