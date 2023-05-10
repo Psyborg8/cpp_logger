@@ -26,10 +26,10 @@ target_compile_options( cpp_logger
 
 # Build Type
 if( CMAKE_BUILD_TYPE STREQUAL "DEBUG" )
-    target_compile_options( cpp_logger PUBLIC -ggdb3 -Og )
+    target_compile_options( cpp_logger PRIVATE -ggdb3 -Og )
     target_compile_definitions( cpp_logger PRIVATE _DEBUG=1 )
 elseif( CMAKE_BUILD_TYPE EQUAL "RELEASE" )
-    target_compile_options( cpp_logger PUBLIC -O2 )
+    target_compile_options( cpp_logger PRIVATE -O2 )
 endif()
 
 # Tests
