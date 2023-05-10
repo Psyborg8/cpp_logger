@@ -33,7 +33,7 @@ elseif( CMAKE_BUILD_TYPE EQUAL "RELEASE" )
 endif()
 
 # Tests
-if( BUILD_TESTS )
+if( CPP_LOGGER_BUILD_TESTS )
     file( GLOB_RECURSE TEST_SRC tests/*.cpp )
     add_executable( cpp_logger_tests ${TEST_SRC} )
     target_link_libraries( cpp_logger_tests cpp_logger )

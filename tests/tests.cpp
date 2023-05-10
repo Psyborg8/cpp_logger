@@ -12,21 +12,19 @@ void write_test( const logger::Logger& logger );
 
 int main( int argc, char** argv ) {
 	// Test One
-	logger::Logger test_one;
-	logger::Logger test_two;
-	logger::Logger test_three;
-	logger::Logger test_four;
+	logger::Logger test_one{ "TEST ONE" };
+	logger::Logger test_two{ "TEST TWO" };
+	logger::Logger test_three{ "TEST THREE" };
+	logger::Logger test_four{ "TEST FOUR" };
 
 	logger::Settings settings;
 	{
 		settings		   = test_one.get_settings();
-		settings.name	   = "TEST ONE";
 		settings.file_name = "test_one.log";
 		test_one.set_settings( settings );
 	}
 	{
 		settings					   = test_two.get_settings();
-		settings.name				   = "TEST TWO";
 		settings.visible_depth		   = logger::Depth::TRACE;
 		settings.console_color_enabled = true;
 		settings.file_name			   = "test_two.log";
@@ -34,14 +32,12 @@ int main( int argc, char** argv ) {
 	}
 	{
 		settings					   = test_three.get_settings();
-		settings.name				   = "TEST THREE";
 		settings.file_enabled		   = false;
 		settings.console_color_enabled = false;
 		test_three.set_settings( settings );
 	}
 	{
 		settings				 = test_four.get_settings();
-		settings.name			 = "TEST FOUR";
 		settings.console_enabled = false;
 		settings.file_name		 = "test_four.log";
 		test_four.set_settings( settings );
@@ -68,7 +64,7 @@ int main( int argc, char** argv ) {
 
 	// Example
 	logger::Logger example;
-	logger::Logger example_2;
+	logger::Logger example_2{ "MODULE" };
 
 	{
 		settings		   = example.get_settings();
@@ -77,7 +73,6 @@ int main( int argc, char** argv ) {
 	}
 	{
 		settings		   = example_2.get_settings();
-		settings.name	   = "MODULE";
 		settings.file_name = "example.log";
 		example_2.set_settings( settings );
 	}
