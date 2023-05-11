@@ -40,7 +40,7 @@ std::unordered_map< Depth, console::String > _depth_string_map{
 // ======================================================================
 
 size_t longest_depth_length() {
-	return to_string( Depth::CRITICAL ).length();
+	return to_string( Depth::CRITICAL, false ).length();
 }
 
 // ----------------------------------------------------------------------
