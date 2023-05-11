@@ -242,7 +242,7 @@ std::string Logger::create_file_string( std::string msg, Depth depth ) const {
 	}
 
 	// Message
-	out += msg;
+	out += msg + "\n";
 
 	return out;
 }
