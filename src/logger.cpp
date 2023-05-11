@@ -250,7 +250,7 @@ std::string Logger::create_file_string( std::string msg, Depth depth ) const {
 // ----------------------------------------------------------------------
 
 void Logger::write_to_file( std::string str ) const {
-	std::filesystem::path path{ std::filesystem::canonical( "/proc/self/exe" ) };
+	std::filesystem::path path{ std::filesystem::canonical( "/proc/self/exe" ).parent_path() };
 	path /= m_settings.file_directory;
 	path /= m_settings.file_name;
 
