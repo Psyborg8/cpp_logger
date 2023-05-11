@@ -125,8 +125,7 @@ void Logger::log( std::string message, Depth depth, size_t indentation ) const {
 						.c_str() );
 
 		if( m_settings.file_enabled )
-			printf(
-				"%s\n",
+			write_to_file(
 				create_file_string( indent_string( line, indentation ), depth ).c_str() );
 	}
 }
@@ -258,7 +257,8 @@ void Logger::write_to_file( std::string str ) const {
 	if( path.has_parent_path() && !std::filesystem::exists( path.parent_path() ) )
 		std::filesystem::create_directories( path.parent_path() );
 
-	std::ofstream ofs( path );
+	std::ofstream ofs;
+	ofs.open( path, std::ios_base::out | std::ios_base::app );
 	if( !ofs.is_open() ) {
 		printf( "WARNING - logger::write_to_file : Cannot open log file '%s'\n",
 				path.c_str() );
