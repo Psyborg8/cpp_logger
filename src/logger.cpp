@@ -242,7 +242,7 @@ std::string Logger::create_file_string( std::string msg, Depth depth ) const {
 	}
 
 	// Message
-	out += msg + "\n";
+	out += msg;
 
 	return out;
 }
@@ -250,7 +250,7 @@ std::string Logger::create_file_string( std::string msg, Depth depth ) const {
 // ----------------------------------------------------------------------
 
 void Logger::write_to_file( std::string str ) const {
-	std::filesystem::path path{ std::filesystem::current_path() };
+	std::filesystem::path path{ std::filesystem::canonical( "/proc/self/exe" ) };
 	path /= m_settings.file_directory;
 	path /= m_settings.file_name;
 
@@ -265,7 +265,7 @@ void Logger::write_to_file( std::string str ) const {
 		return;
 	}
 
-	ofs << str.c_str();
+	ofs << str.c_str() << "\n";
 	ofs.close();
 }
 
